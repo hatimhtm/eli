@@ -33,12 +33,15 @@ struct TranslationView: View {
     }
 
     var body: some View {
-        HSplitView {
+        // Plain HStack (not HSplitView) so the two panes always fit the window —
+        // HSplitView enforces a large minimum width and grew the window off-screen.
+        HStack(spacing: 0) {
             pane(
                 title: LanguageName.of(sourceLanguage),
                 text: $source,
                 trailing: { EmptyView() }
             )
+            Divider()
             pane(
                 title: LanguageName.of(targetLanguage),
                 text: translationBinding,
@@ -86,7 +89,7 @@ struct TranslationView: View {
                 focusMode: false
             )
         }
-        .frame(minWidth: 280)
+        .frame(maxWidth: .infinity) // share the window equally; shrink to fit, never overflow
         .background(palette.background)
     }
 
