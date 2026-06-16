@@ -15,6 +15,7 @@ struct TranslationView: View {
     let font: NSFont
     let lineSpacing: CGFloat
     let paragraphSpacing: CGFloat
+    var firstLineIndent: CGFloat = 0
 
     @AppStorage("translation.model") private var model = "gemini-3.5-flash"
     @AppStorage("translation.refine") private var refine = true
@@ -84,6 +85,7 @@ struct TranslationView: View {
                 font: font,
                 lineSpacing: lineSpacing,
                 paragraphSpacing: paragraphSpacing,
+                firstLineIndent: firstLineIndent,
                 measureWidth: 620, // comfortable reading width; centers in wide panes
                 typewriter: false,
                 focusMode: false

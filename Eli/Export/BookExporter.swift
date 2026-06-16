@@ -69,6 +69,7 @@ struct BookExporter {
         let bodyStyle = NSMutableParagraphStyle()
         bodyStyle.lineSpacing = 3
         bodyStyle.paragraphSpacing = 9
+        bodyStyle.firstLineHeadIndent = 24 // "linea" — first-line paragraph indent
 
         let result = NSMutableAttributedString()
         result.append(NSAttributedString(string: title + "\n", attributes: [.font: titleFont]))

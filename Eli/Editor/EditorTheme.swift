@@ -4,7 +4,7 @@ import AppKit
 /// A writing theme — researched, eye-comfortable palettes (docs/research/relaxing-themes.md).
 /// Deliberately no green; burgundy ships as Blush (light) + Wine (dark).
 enum EditorThemeID: String, CaseIterable, Identifiable {
-    case system, light, cream, sepia, sand, mist, blush, dark, warmDark, midnight, espresso, wine
+    case system, light, cream, sepia, sand, mist, blush, dark, warmDark, midnight, espresso, burgundy
     var id: String { rawValue }
 
     var label: String {
@@ -20,7 +20,7 @@ enum EditorThemeID: String, CaseIterable, Identifiable {
         case .warmDark: return "Warm Dark"
         case .midnight: return "Midnight"
         case .espresso: return "Espresso"
-        case .wine:     return "Wine"
+        case .burgundy: return "Burgundy"
         }
     }
 }
@@ -59,7 +59,7 @@ extension EditorThemeID {
         case .warmDark: return .make(bg: 0x211E1B, ink: 0xE4DCCF, dim: 0xA89F90, dark: true)
         case .midnight: return .make(bg: 0x14181F, ink: 0xC9D1D9, dim: 0x8B949E, dark: true)
         case .espresso: return .make(bg: 0x241B17, ink: 0xE8D9C5, dim: 0xB09A82, dark: true)
-        case .wine:     return .make(bg: 0x2A1118, ink: 0xE9D7C7, dim: 0xB98A8A, dark: true)
+        case .burgundy: return .make(bg: 0x2A1118, ink: 0xE9D7C7, dim: 0xB98A8A, dark: true)
         }
     }
 }

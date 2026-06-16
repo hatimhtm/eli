@@ -41,6 +41,7 @@ struct ContentView: View {
     @AppStorage("editor.fontSize") private var fontSize = 18.0
     @AppStorage("editor.lineSpacing") private var lineSpacing = 6.0
     @AppStorage("editor.paragraphSpacing") private var paragraphSpacing = 12.0
+    @AppStorage("editor.indentParagraphs") private var indentParagraphs = true
     @AppStorage("editor.measure") private var measure = 680.0
     @AppStorage("editor.typewriter") private var typewriter = false
     @AppStorage("editor.focusMode") private var focusMode = false
@@ -51,6 +52,7 @@ struct ContentView: View {
     private var fontChoice: FontChoice { FontChoice(rawValue: fontRaw) ?? .serif }
     private var palette: EditorPalette { theme.palette }
     private var accent: AccentChoice { AccentChoice(rawValue: accentRaw) ?? .burgundy }
+    private var firstLineIndent: CGFloat { indentParagraphs ? round(fontSize * 1.9) : 0 }
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columns) {
@@ -73,6 +75,7 @@ struct ContentView: View {
                             font: fontChoice.nsFont(size: fontSize),
                             lineSpacing: lineSpacing,
                             paragraphSpacing: paragraphSpacing,
+                            firstLineIndent: firstLineIndent,
                             measure: measure,
                             typewriter: typewriter,
                             focusMode: focusMode
@@ -89,7 +92,8 @@ struct ContentView: View {
                             palette: palette,
                             font: fontChoice.nsFont(size: fontSize),
                             lineSpacing: lineSpacing,
-                            paragraphSpacing: paragraphSpacing
+                            paragraphSpacing: paragraphSpacing,
+                            firstLineIndent: firstLineIndent
                         )
                         .id(unit.id)
                     }
@@ -106,6 +110,9 @@ struct ContentView: View {
         .animation(Motion.select, value: mode)
         .onAppear {
             if selection == nil { selection = book.chapters.first?.id }
+            let env = ProcessInfo.processInfo.environment
+            if env["ELI_MODE"] == "translate" { mode = .translate; selection = book.chapters.first?.id }
+            if env["ELI_APPEARANCE"] != nil { showingThemePicker = true }
         }
         .onChange(of: scenePhase) { phase in
             // Auto-backup whenever the app is closed or switched away from.
@@ -211,6 +218,8 @@ struct ContentView: View {
                 Stepper("Line spacing: \(Int(lineSpacing))", value: $lineSpacing, in: 0...16, step: 1)
                 Stepper("Paragraph spacing: \(Int(paragraphSpacing))", value: $paragraphSpacing, in: 0...32, step: 2)
                 Stepper("Line width: \(Int(measure))", value: $measure, in: 480...900, step: 20)
+                Divider()
+                Toggle("Indent paragraphs", isOn: $indentParagraphs)
             } label: {
                 Label("Text Size", systemImage: "textformat.size")
             }
@@ -531,6 +540,7 @@ private struct WritingSurface: View {
     let font: NSFont
     let lineSpacing: CGFloat
     let paragraphSpacing: CGFloat
+    let firstLineIndent: CGFloat
     let measure: CGFloat
     let typewriter: Bool
     let focusMode: Bool
@@ -553,6 +563,7 @@ private struct WritingSurface: View {
                 font: font,
                 lineSpacing: lineSpacing,
                 paragraphSpacing: paragraphSpacing,
+                firstLineIndent: firstLineIndent,
                 measureWidth: measure,
                 typewriter: typewriter,
                 focusMode: focusMode

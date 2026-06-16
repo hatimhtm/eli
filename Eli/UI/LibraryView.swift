@@ -23,9 +23,24 @@ struct RootView: View {
         }
         .tint((AccentChoice(rawValue: accentRaw) ?? .burgundy).color)
         .frame(minWidth: 880, minHeight: 600)
-        .onAppear { if !hasOnboarded { showWelcome = true } }
+        .onAppear {
+            applyDemoHooks()
+            if !hasOnboarded { showWelcome = true }
+        }
         .sheet(isPresented: $showWelcome) {
             WelcomeView { hasOnboarded = true; showWelcome = false }
+        }
+    }
+
+    /// Showcase/screenshot hooks (no effect unless the ELI_* env vars are set).
+    private func applyDemoHooks() {
+        let env = ProcessInfo.processInfo.environment
+        if let theme = env["ELI_THEME"] { UserDefaults.standard.set(theme, forKey: "editor.theme") }
+        if let accent = env["ELI_ACCENT"] { UserDefaults.standard.set(accent, forKey: "editor.accent") }
+        if env["ELI_DEMO"] != nil {
+            hasOnboarded = true
+            let id = library.demoBook()
+            if env["ELI_OPEN"] != nil { openBookID = id }
         }
     }
 }

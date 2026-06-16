@@ -13,6 +13,7 @@ struct EditorTextView: NSViewRepresentable {
     var font: NSFont
     var lineSpacing: CGFloat
     var paragraphSpacing: CGFloat
+    var firstLineIndent: CGFloat
     var measureWidth: CGFloat
     var typewriter: Bool
     var focusMode: Bool
@@ -34,7 +35,11 @@ struct EditorTextView: NSViewRepresentable {
         textView.drawsBackground = false
         textView.isAutomaticQuoteSubstitutionEnabled = true
         textView.isAutomaticDashSubstitutionEnabled = true
-        textView.isContinuousSpellCheckingEnabled = true
+        // No spell/grammar redlining — the writer works in Tagalog, which macOS's
+        // English checker would underline everywhere.
+        textView.isContinuousSpellCheckingEnabled = false
+        textView.isGrammarCheckingEnabled = false
+        textView.isAutomaticSpellingCorrectionEnabled = false
         textView.usesFindBar = true
         textView.string = text
 
@@ -78,13 +83,14 @@ struct EditorTextView: NSViewRepresentable {
 
         // Expensive, whole-document work runs only when an input actually changed
         // (theme/font/size/measure/focus) — not on every keystroke.
-        let signature = "\(font.fontName)|\(font.pointSize)|\(lineSpacing)|\(paragraphSpacing)|\(measureWidth)|\(palette.textNS.hashValue)|\(focusMode)|\(typewriter)"
+        let signature = "\(font.fontName)|\(font.pointSize)|\(lineSpacing)|\(paragraphSpacing)|\(firstLineIndent)|\(measureWidth)|\(palette.textNS.hashValue)|\(focusMode)|\(typewriter)"
         guard context.coordinator.lastSignature != signature else { return }
         context.coordinator.lastSignature = signature
 
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = lineSpacing
         paragraph.paragraphSpacing = paragraphSpacing // breathing room between paragraphs
+        paragraph.firstLineHeadIndent = firstLineIndent // "linea" — indent the first line of each paragraph
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: palette.textNS,

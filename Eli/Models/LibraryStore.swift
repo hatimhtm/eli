@@ -84,4 +84,47 @@ final class LibraryStore: ObservableObject {
         try? fileManager.removeItem(at: url(for: id))
         reload()
     }
+
+    /// A sample book with real prose + a translation — for showcase screenshots.
+    /// Reuses the existing demo if present. (Used only via the ELI_DEMO launch hook.)
+    @discardableResult
+    func demoBook() -> UUID {
+        if let existing = items.first(where: { $0.title == "Letters to the Sea" }) { return existing.id }
+        let id = UUID()
+        var book = Book()
+        book.manifest.title = "Letters to the Sea"
+        book.manifest.author = "Maria"
+        book.manifest.sourceLanguage = "tl"
+        book.manifest.targetLanguage = "en"
+
+        let tagalog1 = """
+        Umaga pa lamang nang marating ni Maria ang dalampasigan. Mahinahon ang alon, parang humihinga ang dagat sa kanyang harapan.
+
+        Naalala niya ang mga kuwento ng kanyang lola — ang mga liham na itinatapon sa tubig, dala ng pag-asa na may makababasa sa kabilang ibayo.
+
+        "Hindi lahat ng nawawala ay tuluyang naglalaho," bulong niya sa hangin.
+        """
+        let english1 = """
+        It was barely morning when Maria reached the shore. The waves were gentle, as if the sea were breathing before her.
+
+        She remembered her grandmother's stories — the letters thrown into the water, carried by the hope that someone on the far shore might read them.
+
+        "Not everything that is lost disappears for good," she whispered to the wind.
+        """
+        let tagalog2 = """
+        Sa gabing iyon, sumulat siya ng kanyang unang liham. Hindi niya alam kung kanino, ngunit alam niyang kailangan niyang simulan.
+
+        Tinupi niya ang papel, hinalikan ito, at iniabot sa alon.
+        """
+
+        book.chapters = [
+            Chapter(title: "The Shore", source: tagalog1, translation: english1, status: .done),
+            Chapter(title: "The First Letter", source: tagalog2, translation: nil, status: .draft)
+        ]
+        book.manifest.settings.wordCountGoal = 50000
+
+        save(book, id: id)
+        reload()
+        return id
+    }
 }
