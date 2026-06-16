@@ -27,23 +27,34 @@ settings:
 
 ## 2. Per release
 
+The release ships a **DMG** (what people download + drag to Applications). Sparkle
+updates from the same DMG (its appcast enclosure points at it).
+
 ```sh
 xcodegen generate
-# Archive + export Developer ID signed:
-xcodebuild -project Eli.xcodeproj -scheme Eli -configuration Release archive -archivePath Eli.xcarchive
-xcodebuild -exportArchive -archivePath Eli.xcarchive -exportPath export -exportOptionsPlist ExportOptions.plist
-# Notarize + staple:
-xcrun notarytool submit export/Eli.app.zip --keychain-profile "AC_PASSWORD" --wait
-xcrun stapler staple export/Eli.app
-# Sign + build the appcast (uses the Keychain private key):
-.../Sparkle/bin/generate_appcast /path/to/folder-with-Eli.app.zip
-```
-Commit the new `Eli-<version>.zip` + `appcast.xml` to this repo's `main` (or attach
-the zip as a Release asset and point the appcast `url` at it). Bump
-`MARKETING_VERSION` in `project.yml` each release.
+# Build universal (Intel + Apple Silicon):
+xcodebuild -project Eli.xcodeproj -scheme Eli -configuration Release \
+  ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO build   # add Developer ID signing when notarizing
+# (ad-hoc only, until a Developer ID cert exists:)  codesign --force --deep --sign - Eli.app
+# Notarize + staple (once you have a Developer ID cert):
+xcrun notarytool submit Eli.dmg --keychain-profile "AC_PASSWORD" --wait && xcrun stapler staple Eli.dmg
 
-**Result:** when you push a release, Eli (on your wife's Mac) notices within a day,
-the toolbar button **lights up**, and one click downloads, installs, and relaunches.
+# Build the DMG (Eli.app + drag-to-Applications):
+mkdir stage && cp -R Eli.app stage/ && ln -s /Applications stage/Applications
+hdiutil create -volname Eli -srcfolder stage -ov -format UDZO "Eli-<version>.dmg"
+
+# Sign the DMG + build the appcast (uses the Keychain EdDSA key):
+.../Sparkle/bin/generate_appcast --download-url-prefix \
+  "https://github.com/hatimhtm/eli/releases/latest/download/" /folder-with-the-dmg
+
+# Publish: attach the DMG + appcast.xml to a GitHub release tagged v<version>:
+gh release create v<version> Eli-<version>.dmg appcast.xml --notes-file CHANGELOG.md
+```
+Bump `MARKETING_VERSION` **and** `CURRENT_PROJECT_VERSION` in `project.yml` each release
+(Sparkle compares the build number to decide what's newer).
+
+**Result:** people download the DMG and drag Eli into Applications; existing installs
+see the update when they click **Check for Updates**, then one click installs it.
 
 ## 3. Publish the repo (optional, for open-source release)
 
