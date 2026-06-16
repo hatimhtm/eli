@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="Eli — a calm place to write your book">
+  <defs>
+    <pattern id="gridd" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F2E9D8" stroke-width="0.5" stroke-opacity="0.06"/>
+    </pattern>
+    <style>
+      .serif { font-family: 'Iowan Old Style', Georgia, 'Times New Roman', serif; font-weight: 700; }
+      .mono  { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Courier New', monospace; font-weight: 600; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="400" fill="#17130F"/>
+  <rect width="1280" height="400" fill="url(#gridd)"/>
+
+  <rect x="0" y="0" width="1280" height="36" fill="#B23A52"/>
+  <text class="mono" x="640" y="24" text-anchor="middle" font-size="12" fill="#17130F" letter-spacing="5">MACOS · SWIFTUI · DISTRACTION-FREE · TAGALOG → ENGLISH · EPUB / PDF / DOCX · FREE &amp; OPEN SOURCE</text>
+
+  <text class="mono" x="60" y="104" font-size="13" fill="#A2917A" letter-spacing="6">WRITE A BOOK / CALMLY / ON YOUR MAC</text>
+
+  <text class="serif" x="56" y="252" font-size="190" fill="#F2E9D8" letter-spacing="-4">Eli<tspan fill="#D9637A">.</tspan></text>
+
+  <text class="mono" x="60" y="312" font-size="14" fill="#F2E9D8" letter-spacing="3">/// CHAPTERS · SCENES · TRANSLATION · THEMES · BACKUPS · SPRINTS ///</text>
+
+  <rect x="1078" y="78" width="142" height="142" rx="14" fill="#B23A52"/>
+  <text class="mono" x="1149" y="135" text-anchor="middle" font-size="13" fill="#17130F" letter-spacing="2">FREE</text>
+  <text class="mono" x="1149" y="156" text-anchor="middle" font-size="13" fill="#17130F" letter-spacing="2">&amp;</text>
+  <text class="mono" x="1149" y="177" text-anchor="middle" font-size="13" fill="#17130F" letter-spacing="2">OPEN</text>
+
+  <text class="mono" x="60" y="378" font-size="12" fill="#A2917A" letter-spacing="4">/// TYPEWRITER &amp; FOCUS MODES · 10 RELAXING THEMES · ONE-CLICK UPDATES · MACOS 13+ ///</text>
+</svg>

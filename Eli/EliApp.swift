@@ -8,6 +8,9 @@ struct EliApp: App {
             RootView()
         }
         .commands {
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesCommand()
+            }
             CommandMenu("Format") {
                 Button("Bold") {
                     NSApp.sendAction(#selector(EliTextView.wrapBold(_:)), to: nil, from: nil)

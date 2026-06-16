@@ -42,13 +42,11 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Hatim El Hassak</string>
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 	<key>SUFeedURL</key>
-	<string>https://hatimhtm.github.io/eli/appcast.xml</string>
+	<string>https://github.com/hatimhtm/eli/releases/latest/download/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>REPLACE_WITH_REAL_ED25519_PUBLIC_KEY_AT_SHIP</string>
-	<key>SUScheduledCheckInterval</key>
-	<integer>86400</integer>
+	<string>WC5lwvOF89DNNoaqkTAcEXpmVGgOsjNATYKj17s90aY=</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

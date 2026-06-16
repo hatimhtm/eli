@@ -39,13 +39,12 @@ targets:
         CFBundleDisplayName: Eli
         LSApplicationCategoryType: public.app-category.productivity
         NSHumanReadableCopyright: "© 2026 Hatim El Hassak"
-        # Sparkle auto-update via GitHub. Public key matches the private key in
-        # Hatim's Keychain (shared with Relay). The appcast lives in this repo;
-        # see docs/SHIPPING.md for the per-release step.
-        SUFeedURL: https://raw.githubusercontent.com/hatimhtm/eli/main/appcast.xml
+        # Sparkle in-app updates — MANUAL ONLY (no background checks), signed
+        # appcast on GitHub Releases. Public key matches Hatim's Keychain private
+        # key (shared with Relay). No Apple notarization needed. See docs/SHIPPING.md.
+        SUFeedURL: "https://github.com/hatimhtm/eli/releases/latest/download/appcast.xml"
         SUPublicEDKey: WC5lwvOF89DNNoaqkTAcEXpmVGgOsjNATYKj17s90aY=
-        SUEnableAutomaticChecks: true
-        SUScheduledCheckInterval: 86400
+        SUEnableAutomaticChecks: false
         CFBundleDocumentTypes:
           - CFBundleTypeName: Eli Book
             CFBundleTypeRole: Editor

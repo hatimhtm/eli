@@ -32,6 +32,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject private var sprint = SprintTimer()
     @State private var showingSprint = false
+    @State private var showingThemePicker = false
     @State private var columns: NavigationSplitViewVisibility = .all
 
     // Editor preferences, persisted across launches.
@@ -191,18 +192,21 @@ struct ContentView: View {
             .help("Typewriter mode — keep the current line centered")
 
             Toggle(isOn: $focusMode) {
-                Label("Focus", systemImage: "circle.lefthalf.filled")
+                Label("Focus", systemImage: "scope")
             }
             .help("Focus mode — dim everything but the current paragraph")
 
+            Button {
+                showingThemePicker = true
+            } label: {
+                Label("Theme", systemImage: "paintpalette")
+            }
+            .help("Choose a theme")
+            .popover(isPresented: $showingThemePicker, arrowEdge: .bottom) {
+                ThemePicker()
+            }
+
             Menu {
-                Menu("Theme") {
-                    ForEach(EditorThemeID.allCases) { t in
-                        Button { themeRaw = t.rawValue } label: {
-                            Label(t.label, systemImage: themeRaw == t.rawValue ? "checkmark" : "circle")
-                        }
-                    }
-                }
                 Menu("Accent") {
                     ForEach(AccentChoice.allCases) { c in
                         Button { accentRaw = c.rawValue } label: {
