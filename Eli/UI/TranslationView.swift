@@ -81,7 +81,7 @@ struct TranslationView: View {
                 font: font,
                 lineSpacing: lineSpacing,
                 paragraphSpacing: paragraphSpacing,
-                measureWidth: 100_000, // fill the pane; centering handled by base padding
+                measureWidth: 620, // comfortable reading width; centers in wide panes
                 typewriter: false,
                 focusMode: false
             )

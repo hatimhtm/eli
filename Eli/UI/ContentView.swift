@@ -192,44 +192,29 @@ struct ContentView: View {
             .help("Typewriter mode — keep the current line centered")
 
             Toggle(isOn: $focusMode) {
-                Label("Focus", systemImage: "scope")
+                Label("Focus", systemImage: "highlighter")
             }
             .help("Focus mode — dim everything but the current paragraph")
 
             Button {
                 showingThemePicker = true
             } label: {
-                Label("Theme", systemImage: "paintpalette")
+                Label("Appearance", systemImage: "paintpalette")
             }
-            .help("Choose a theme")
+            .help("Theme, accent color, and font")
             .popover(isPresented: $showingThemePicker, arrowEdge: .bottom) {
                 ThemePicker()
             }
 
             Menu {
-                Menu("Accent") {
-                    ForEach(AccentChoice.allCases) { c in
-                        Button { accentRaw = c.rawValue } label: {
-                            Label(c.label, systemImage: accentRaw == c.rawValue ? "checkmark" : "circle.fill")
-                        }
-                    }
-                }
-                Menu("Font") {
-                    ForEach(FontChoice.allCases) { f in
-                        Button { fontRaw = f.rawValue } label: {
-                            Label(f.label, systemImage: fontRaw == f.rawValue ? "checkmark" : "textformat")
-                        }
-                    }
-                }
-                Divider()
                 Stepper("Text size: \(Int(fontSize))", value: $fontSize, in: 12...30, step: 1)
                 Stepper("Line spacing: \(Int(lineSpacing))", value: $lineSpacing, in: 0...16, step: 1)
                 Stepper("Paragraph spacing: \(Int(paragraphSpacing))", value: $paragraphSpacing, in: 0...32, step: 2)
                 Stepper("Line width: \(Int(measure))", value: $measure, in: 480...900, step: 20)
             } label: {
-                Label("Display", systemImage: "textformat.size")
+                Label("Text Size", systemImage: "textformat.size")
             }
-            .help("Theme, font, and layout")
+            .help("Text size, spacing, and line width")
 
             Menu {
                 Toggle("Export the translation", isOn: $exportTranslation)

@@ -1,9 +1,10 @@
 import SwiftUI
 import AppKit
 
-/// A writing theme — a curated set of calm, relaxing palettes (deliberately no green).
+/// A writing theme — researched, eye-comfortable palettes (docs/research/relaxing-themes.md).
+/// Deliberately no green; burgundy ships as Blush (light) + Wine (dark).
 enum EditorThemeID: String, CaseIterable, Identifiable {
-    case system, light, cream, sepia, sand, mist, rose, dark, midnight, espresso
+    case system, light, cream, sepia, sand, mist, blush, dark, warmDark, midnight, espresso, wine
     var id: String { rawValue }
 
     var label: String {
@@ -14,10 +15,12 @@ enum EditorThemeID: String, CaseIterable, Identifiable {
         case .sepia:    return "Sepia"
         case .sand:     return "Sand"
         case .mist:     return "Mist"
-        case .rose:     return "Rose"
+        case .blush:    return "Blush"
         case .dark:     return "Dark"
+        case .warmDark: return "Warm Dark"
         case .midnight: return "Midnight"
         case .espresso: return "Espresso"
+        case .wine:     return "Wine"
         }
     }
 }
@@ -45,28 +48,31 @@ extension EditorThemeID {
                 dimNS: .tertiaryLabelColor, caretNS: .labelColor,
                 background: Color(nsColor: .textBackgroundColor), text: Color(nsColor: .labelColor),
                 preferredScheme: nil, appearanceName: nil)
-        case .light:    return .make(bg: (0.992, 0.992, 0.996), ink: (0.13, 0.13, 0.15), dark: false)
-        case .cream:    return .make(bg: (0.980, 0.957, 0.906), ink: (0.227, 0.196, 0.149), dark: false)
-        case .sepia:    return .make(bg: (0.937, 0.886, 0.792), ink: (0.337, 0.255, 0.169), dark: false)
-        case .sand:     return .make(bg: (0.945, 0.929, 0.898), ink: (0.270, 0.247, 0.208), dark: false)
-        case .mist:     return .make(bg: (0.925, 0.937, 0.953), ink: (0.180, 0.210, 0.247), dark: false)
-        case .rose:     return .make(bg: (0.969, 0.933, 0.929), ink: (0.290, 0.220, 0.224), dark: false)
-        case .dark:     return .make(bg: (0.110, 0.110, 0.122), ink: (0.902, 0.902, 0.910), dark: true)
-        case .midnight: return .make(bg: (0.075, 0.086, 0.118), ink: (0.840, 0.860, 0.910), dark: true)
-        case .espresso: return .make(bg: (0.118, 0.094, 0.078), ink: (0.910, 0.870, 0.800), dark: true)
+        // Researched palettes (hex → sRGB): bg / text / dim. See docs/research/relaxing-themes.md.
+        case .light:    return .make(bg: 0xF7F6F2, ink: 0x2B2B2B, dim: 0x6B6B68, dark: false)
+        case .cream:    return .make(bg: 0xFBF8F1, ink: 0x3A3A38, dim: 0x7C7468, dark: false)
+        case .sepia:    return .make(bg: 0xF4ECD8, ink: 0x5B4636, dim: 0x7A6248, dark: false)
+        case .sand:     return .make(bg: 0xEDE6D6, ink: 0x4A4036, dim: 0x756A5A, dark: false)
+        case .mist:     return .make(bg: 0xEAEEF2, ink: 0x33404A, dim: 0x5E6A74, dark: false)
+        case .blush:    return .make(bg: 0xF7EAEA, ink: 0x5A1A2B, dim: 0x8A4A55, dark: false)
+        case .dark:     return .make(bg: 0x1E1E1E, ink: 0xD6D3CC, dim: 0x9A968C, dark: true)
+        case .warmDark: return .make(bg: 0x211E1B, ink: 0xE4DCCF, dim: 0xA89F90, dark: true)
+        case .midnight: return .make(bg: 0x14181F, ink: 0xC9D1D9, dim: 0x8B949E, dark: true)
+        case .espresso: return .make(bg: 0x241B17, ink: 0xE8D9C5, dim: 0xB09A82, dark: true)
+        case .wine:     return .make(bg: 0x2A1118, ink: 0xE9D7C7, dim: 0xB98A8A, dark: true)
         }
     }
 }
 
 private extension EditorPalette {
-    /// Build a fixed light/dark palette from RGB tuples; dim is a blend toward the bg.
-    static func make(bg: (Double, Double, Double), ink: (Double, Double, Double), dark: Bool) -> EditorPalette {
-        let bgC = NSColor(srgbRed: bg.0, green: bg.1, blue: bg.2, alpha: 1)
-        let inkC = NSColor(srgbRed: ink.0, green: ink.1, blue: ink.2, alpha: 1)
-        let t = 0.55 // dim = ink blended 55% toward bg
-        let dimC = NSColor(srgbRed: ink.0 + (bg.0 - ink.0) * t,
-                           green: ink.1 + (bg.1 - ink.1) * t,
-                           blue: ink.2 + (bg.2 - ink.2) * t, alpha: 1)
+    /// Build a fixed light/dark palette from hex bg / text / dim values.
+    static func make(bg: Int, ink: Int, dim: Int, dark: Bool) -> EditorPalette {
+        func color(_ hex: Int) -> NSColor {
+            NSColor(srgbRed: Double((hex >> 16) & 0xFF) / 255,
+                    green: Double((hex >> 8) & 0xFF) / 255,
+                    blue: Double(hex & 0xFF) / 255, alpha: 1)
+        }
+        let bgC = color(bg), inkC = color(ink), dimC = color(dim)
         return EditorPalette(
             backgroundNS: bgC, textNS: inkC, dimNS: dimC, caretNS: inkC,
             background: Color(nsColor: bgC), text: Color(nsColor: inkC),
