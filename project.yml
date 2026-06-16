@@ -1,0 +1,63 @@
+name: Eli
+options:
+  bundleIdPrefix: com.hatimhtm
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "13.0"
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+    # DEVELOPMENT_TEAM is set in Xcode (DRF group / paid team) when we ship + notarize.
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.5.0"
+targets:
+  Eli:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+    sources:
+      - path: Eli
+    dependencies:
+      - package: Sparkle
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hatimhtm.eli
+        PRODUCT_NAME: Eli
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_ENTITLEMENTS: Eli/Eli.entitlements
+        COMBINE_HIDPI_IMAGES: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    info:
+      path: Eli/Info.plist
+      properties:
+        CFBundleName: Eli
+        CFBundleDisplayName: Eli
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: "© 2026 Hatim El Hassak"
+        # Sparkle auto-update via GitHub. Public key matches the private key in
+        # Hatim's Keychain (shared with Relay). The appcast lives in this repo;
+        # see docs/SHIPPING.md for the per-release step.
+        SUFeedURL: https://raw.githubusercontent.com/hatimhtm/eli/main/appcast.xml
+        SUPublicEDKey: WC5lwvOF89DNNoaqkTAcEXpmVGgOsjNATYKj17s90aY=
+        SUEnableAutomaticChecks: true
+        SUScheduledCheckInterval: 86400
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Eli Book
+            CFBundleTypeRole: Editor
+            LSHandlerRank: Owner
+            LSItemContentTypes:
+              - com.hatimhtm.eli.book
+            LSTypeIsPackage: true
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: com.hatimhtm.eli.book
+            UTTypeDescription: Eli Book
+            UTTypeConformsTo:
+              - com.apple.package
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - eli
