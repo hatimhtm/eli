@@ -15,6 +15,10 @@
 </p>
 
 <p align="center">
+  <img src="assets-readme/screenshot.jpg" alt="eli's chapter editor" width="100%" />
+</p>
+
+<p align="center">
   <em>Eli is a free, beautiful, distraction-free book-writing app for macOS. It feels like Ulysses, organizes like Scrivener without the cockpit, and does one thing none of them do: translate your manuscript chapter by chapter into polished, literary English. Native SwiftUI, no Electron, no subscription. It keeps your books for you (no files to hunt down), backs them up automatically, and updates with one click. Built first for one writer working in Tagalog; free for every writer.</em>
 </p>
 
